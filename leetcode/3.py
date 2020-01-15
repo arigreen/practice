@@ -6,6 +6,7 @@ import pytest
 
 
 def length_of_longest_substring_brute_force(s: str) -> int:
+    # 576 ms on LeetCode
     if not s:
         return 0
 
@@ -22,13 +23,32 @@ def length_of_longest_substring_brute_force(s: str) -> int:
     return max(length_starting_at_position(pos) for pos in range(len(s)))
 
 
+def length_of_longest_substring_onepass(s: str) -> int:
+    # 60 ms on LeetCode
+    max_length = 0
+    current_substring = ""
+    for index in range(len(s)):
+        pos = current_substring.find(s[index])
+        if pos >= 0:
+            max_length = max(max_length, len(current_substring))
+            current_substring = current_substring[pos + 1 :]
+
+        current_substring += s[index]
+
+    max_length = max(max_length, len(current_substring))
+
+    return max_length
+
+
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        return length_of_longest_substring_brute_force(s)
+        return length_of_longest_substring_onepass(s)
 
 
 @pytest.mark.parametrize(
-    ("s", "expected"), [("", 0), ("abcabcbb", 3), ("bbbbb", 1), ("pwwkew", 3)]
+    ("s", "expected"),
+    [("", 0), ("aab", 2), ("abcabcbb", 3), ("bbbbb", 1), ("pwwkew", 3)],
 )
 def test_length_of_longest_substring(s: str, expected: int) -> None:
     assert length_of_longest_substring_brute_force(s) == expected
+    assert length_of_longest_substring_onepass(s) == expected
