@@ -6,17 +6,17 @@ import pytest
 
 
 def length_of_longest_substring_brute_force(s: str) -> int:
-    # 576 ms on LeetCode
+    # 432 ms on LeetCode
     if not s:
         return 0
 
     def length_starting_at_position(pos: int) -> int:
         result = 0
         seen: Set[str] = set()
-        for index in range(pos, len(s)):
-            if s[index] in seen:
+        for c in s[pos:]:
+            if c in seen:
                 break
-            seen.add(s[index])
+            seen.add(c)
             result += 1
         return result
 
@@ -24,16 +24,16 @@ def length_of_longest_substring_brute_force(s: str) -> int:
 
 
 def length_of_longest_substring_onepass(s: str) -> int:
-    # 60 ms on LeetCode
+    # 52 ms on LeetCode
     max_length = 0
     current_substring = ""
-    for index in range(len(s)):
-        pos = current_substring.find(s[index])
+    for c in s:
+        pos = current_substring.find(c)
         if pos >= 0:
             max_length = max(max_length, len(current_substring))
             current_substring = current_substring[pos + 1 :]
 
-        current_substring += s[index]
+        current_substring += c
 
     max_length = max(max_length, len(current_substring))
 
