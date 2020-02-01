@@ -5,7 +5,9 @@
 # Y   I   R
 # And then read line by line: "PAHNAPLSIIGYIR"
 # Write the code that will take a string and make this conversion given a number of rows:
+import itertools
 from typing import Generator
+from typing import Iterator
 
 import pytest
 
@@ -25,12 +27,10 @@ def convert(s: str, num_rows: int) -> str:
                     index += 2 * (row)
                 downward = not downward
 
-    result = ""
-    for row in range(num_rows):
-        for char in gen_row(row):
-            result += char
+    def gen_all() -> Iterator[str]:
+        return itertools.chain(*[gen_row(row) for row in range(num_rows)])
 
-    return result
+    return "".join(char for char in gen_all())
 
 
 class Solution:
