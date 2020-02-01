@@ -30,6 +30,9 @@ def convert(s: str, num_rows: int) -> str:
     def gen_all() -> Iterator[str]:
         return itertools.chain(*[gen_row(row) for row in range(num_rows)])
 
+    if num_rows == 1:
+        return s
+
     return "".join(char for char in gen_all())
 
 
@@ -43,6 +46,7 @@ class Solution:
     [
         ("", 0, ""),
         ("", 1, ""),
+        ("A", 1, "A"),
         ("PAYPALISHIRING", 3, "PAHNAPLSIIGYIR"),
         ("PAYPALISHIRING", 4, "PINALSIGYAHRPI"),
     ],
