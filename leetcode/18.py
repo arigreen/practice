@@ -10,13 +10,13 @@ from utils import timing
 
 
 def k_sum(nums: List[int], target: int, k: int) -> List[List[int]]:
-    def k_sum_sorted(nums: List[int], target: int, k: int) -> List[List[int]]:
+    def k_sum_sorted(start_index: int, target: int, k: int) -> List[List[int]]:
         """
         Assumes that nums has been sorted and that k >= 2.
         """
         results: List[List[int]] = []
         if k == 2:
-            left = 0
+            left = start_index
             right = len(nums) - 1
             while left < right:
                 if nums[left] + nums[right] < target:
@@ -28,9 +28,9 @@ def k_sum(nums: List[int], target: int, k: int) -> List[List[int]]:
                     left += 1
                     right -= 1
         else:
-            for first_index in range(len(nums)):
+            for first_index in range(start_index, len(nums)):
                 new_target = target - nums[first_index]
-                sub_results = k_sum_sorted(nums[first_index + 1 :], new_target, k - 1)
+                sub_results = k_sum_sorted(first_index + 1, new_target, k - 1)
                 combined_results = [
                     [nums[first_index]] + sub_result for sub_result in sub_results
                 ]
@@ -43,7 +43,8 @@ def k_sum(nums: List[int], target: int, k: int) -> List[List[int]]:
     elif k == 1:
         results = [[target]] if target in nums else []
     else:
-        results = k_sum_sorted(sorted(nums), target, k)
+        nums.sort()
+        results = k_sum_sorted(0, target, k)
 
     # Uniqify results
     return [list(result) for result in {tuple(result) for result in results}]
