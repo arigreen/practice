@@ -19,7 +19,7 @@ from utils import timing
 class Solution:
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
         if not words:
-            return list(range(len(s)))
+            return []
         num_words = len(words)
         word_length = len(words[0])
         template: CounterType[str] = Counter(words)
@@ -44,9 +44,11 @@ class Solution:
         counts: CounterType[str] = Counter()
         for n in range(num_words):
             word = s[i : i + word_length]
+            if word not in template or counts[word] == template[word]:
+                return False
             counts[word] += 1
             i += word_length
-        return counts == template
+        return True
 
 
 try:
